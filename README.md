@@ -76,122 +76,8 @@ CREATE TABLE users (
 
 ---
 
-## 🗓️ Day-by-Day Implementation Plan
 
-### **Day 1 – Setup & Database**
-- Initialize Go module and dependencies  
-- Setup Docker Compose for PostgreSQL  
-- Create `.env` and migration files  
-- Test DB connection  
 
-✅ *Deliverable:* Project runs & connects to DB successfully
-
----
-
-### **Day 2 – User Model & Security**
-- Define `User` struct with JSON tags  
-- Implement password hashing (`bcrypt`)  
-- Implement JWT generation & validation  
-- Write tests for both utilities  
-
-✅ *Deliverable:* Security utilities functional and tested
-
----
-
-### **Day 3 – Authentication Endpoints**
-- Implement `Register` and `Login` handlers  
-- Add routes for `/api/auth/register` and `/api/auth/login`  
-- Test with Postman  
-
-✅ *Deliverable:* Register + Login + JWT flow working
-
----
-
-### **Day 4 – Protected User Endpoints**
-- Create Auth middleware (JWT validation)  
-- Implement user CRUD operations  
-- Apply middleware to `/api/users/*`  
-
-✅ *Deliverable:* CRUD operations with authentication
-
----
-
-### **Day 5 – Middleware & Error Handling**
-- Add logging and CORS middleware  
-- Implement standardized JSON error responses  
-- Validate inputs and sanitize data  
-- Move all secrets to `.env`  
-
-✅ *Deliverable:* Production-ready backend
-
----
-
-### **Day 6 – Documentation & Deployment**
-- Write this README 😎  
-- Create Dockerfile (multi-stage build)  
-- Deploy using **Railway**, **Render**, or **Fly.io**  
-- Add GitHub badges and CI setup  
-
-✅ *Deliverable:* Fully documented and deployable API
-
----
-
-## 🔧 Key Code Snippets
-
-### 🧠 Main Server Setup
-
-```go
-func main() {
-    // Load environment variables
-    godotenv.Load()
-
-    // Connect to database
-    db := database.Connect()
-    defer db.Close()
-
-    // Setup router
-    r := mux.NewRouter()
-
-    // Public routes
-    r.HandleFunc("/api/auth/register", handlers.Register(db)).Methods("POST")
-    r.HandleFunc("/api/auth/login", handlers.Login(db)).Methods("POST")
-
-    // Protected routes
-    api := r.PathPrefix("/api/users").Subrouter()
-    api.Use(middleware.Auth)
-    api.HandleFunc("", handlers.GetUsers(db)).Methods("GET")
-    api.HandleFunc("/{id}", handlers.GetUser(db)).Methods("GET")
-
-    log.Fatal(http.ListenAndServe(":8080", r))
-}
-```
-
----
-
-### 🔐 Auth Middleware Example
-
-```go
-func Auth(next http.Handler) http.Handler {
-    return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-        token := r.Header.Get("Authorization")
-        if token == "" {
-            http.Error(w, "Unauthorized", http.StatusUnauthorized)
-            return
-        }
-
-        userID, err := utils.ValidateToken(token)
-        if err != nil {
-            http.Error(w, "Invalid token", http.StatusUnauthorized)
-            return
-        }
-
-        ctx := context.WithValue(r.Context(), "userID", userID)
-        next.ServeHTTP(w, r.WithContext(ctx))
-    })
-}
-```
-
----
 
 ## ✅ Testing Checklist
 
@@ -205,7 +91,7 @@ func Auth(next http.Handler) http.Handler {
 
 ---
 
-## 🎯 Stretch Goals (Optional)
+## 🎯 Future Improvements
 
 - 🔁 Email verification flow  
 - 🔑 Password reset  
@@ -227,15 +113,6 @@ func Auth(next http.Handler) http.Handler {
 
 ---
 
-## 🚀 Next Steps
-
-After completing this project, continue with:
-
-**🧩 Project 3: Task Management App**
-- Build a full-stack system using Next.js frontend + this Go API backend  
-- Implement advanced features like notifications, analytics, and admin dashboards  
-
----
 
 ## 🏁 Author
 
