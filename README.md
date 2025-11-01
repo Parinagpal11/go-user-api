@@ -1,14 +1,6 @@
-# 🚀 REST API with Go — Complete Implementation Guide
+# 🚀 REST API with Go 
 
-A production-ready **User Management REST API** built using **Go**, **PostgreSQL**, and **Docker**, featuring full **authentication**, **middleware**, and **CRUD** operations.
-
----
-
-## 📋 Project Overview
-
-**Duration:** 4–6 days  
-**Tech Stack:** Go · PostgreSQL · Docker  
-**Goal:** Build a scalable user management API with authentication and JWT-based security.
+A  **User Management REST API** built using **Go**, **PostgreSQL**, and **Docker**, featuring full **authentication**, **middleware**, and **CRUD** operations.
 
 ---
 
